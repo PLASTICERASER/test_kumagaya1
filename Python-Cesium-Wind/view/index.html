@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>test</title>
+    <meta charset="utf-8">
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.68/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.68/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+
+<body>
+　　<h2>クライアントからPythonを呼び出して流体計算を実行し、計算結果を受け取ってCesiumで表示させる</h2>　　
+
+    <div id="cesiumContainer" style="width: 100%; height:100%"></div>
+    
+    <script>
+        // Python main.pyを実行し流体計算結果を受け取る
+        async function run() {
+            var result = await eel.main_simulation()();
+            console.log(result);
+            //console.log(result[0][0][0], result[1][0][0])
+            //console.log(result[2][0][0], result[3][0][0])
+            //console.log(result[0][47][47], result[1][47][47])
+            //console.log(result[2][47][47], result[3][47][47])
+
+            var viewer = new Cesium.Viewer('cesiumContainer');
+            var tileset = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
+                url: "C:\Users\kogan\Downloads\11202kumagaya\11202_kumagaya-shi_2020_3Dtiles_etc_1_op\01_building\11202_kumagaya-shi_2020_bldg_low_resolution\tileset.json",
+            }))
+
+            for (var i = 1; i < 46; i++) {  // 0列目,47列目のベクトルは描写しない
+                for (var j = 1; j < 46; j++) {  //0行目、47行目のベクトルは描写しない
+                    if ((result[2][i][j] + result[3][i][j]) > 0.) {
+
+                        if ((result[4][i][j]) < 1)  {
+                            vel_Color = Cesium.Color.GREENYELLOW
+                        } else {
+                            vel_Color = Cesium.Color.RED
+                        }
+
+                        var line1 = viewer.entities;   //Cesiumで任意の座標間で線を引く
+                        line1.add({
+                            polyline: {
+                                positions: Cesium.Cartesian3.fromDegreesArrayHeights([
+                                    result[0][i][j], result[1][i][j], 20,   // 始点座標x,y,標高z
+                                    result[2][i][j], result[3][i][j], 20    // 終点座標xmy,標高z
+                                ]),
+                                width: 10,
+                                material: new Cesium.PolylineArrowMaterialProperty(vel_Color)
+                            }
+                        });
+                    }
+                }
+            }
+
+            viewer.zoomTo(viewer.entities);
+
+            Cesium.when(tileset.readyPromise).then(function (tileset) { viewer.flyTo(tileset) }) // fly to 3D tiles after loading!
+        }
+        run();
+
+    </script>
+</body>
+</html>

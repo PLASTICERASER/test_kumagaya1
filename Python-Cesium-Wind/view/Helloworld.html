@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>test</title>
+    <meta charset="utf-8">
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.68/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.68/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+
+<body>
+    <script>
+      var viewer = new Cesium.Viewer('cesiumContainer');
+    </script>
+  </body>
+  <script>
+    var viewer = new Cesium.Viewer('cesiumContainer');　
+    
+    var point = viewer.entities.add({
+          name:"福井市", //レイヤ名
+          description:"ここは福井市です。",　//レイヤの説明
+            position : Cesium.Cartesian3.fromDegrees(136.223554,36.061957,0), //経度,緯度,高さ
+            point : {
+                pixelSize : 10, //ポイントのサイズ
+                color : Cesium.Color.BLUE //ポイントの色
+            }
+        });
+    
+        viewer.zoomTo(viewer.entities);　//レイヤにズーム
+    </script>
+    

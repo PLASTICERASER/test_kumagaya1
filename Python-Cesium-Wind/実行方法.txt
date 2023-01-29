@@ -1,0 +1,30 @@
+# Python-Cesium-Wind
+
+<VS Codeで開発＞
+①pythonインタプリタはPython3.8.5 64-bitを使う
+
+②必要なライブラリのインストール
+pip install smopy 
+pip install opencv-contrib-python
+pip install numpy
+pip install matplotlib
+
+③PythonとJavaScript間でデータのやりとりをするため、ライブラリeelをインストールする
+pip install eel
+
+④OpenWeatheMapのAPI Keyを取得し、Main.pyの以下の[ ]部分をまるごと入れ替える。
+    appid = '[OpenWeatheMapのAPI Keyを取得し、ここに挿入する]'
+
+---
+実行方法
+python main.py
+
+---
+＜任意の緯度経度の地点の風を計算する方法＞
+main.pyの20,21行目のコードで、緯度経度を指定してください。
+
+    lat = 35.626　　← 計算したい緯度を入力
+    lon = 139.726　 ← 計算したい経度を入力
+
+　
+
